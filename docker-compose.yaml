@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      dockerfile: ./docker/dev.app.Dockerfile
+    container_name: galickho-app
+    tty: true
+    volumes:
+      - ./app:/app
+    ports:
+      - 3000:3000
+      - 5555:5555
+
+    command: sh -c "npm run dev"
+
+  db:
+    image: mysql:8.0.33
+    container_name: galickho-db
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      # 開発環境はハードコードしても問題ない
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: dev_db
+    volumes:
+      # 設定ファイルディレクトリにマウントする
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      # DB初期化ディレクトリにマウントする
+      # - ./mysql/init.d:/docker-entrypoint-initdb.d
+      - galickho-db-data:/var/lib/mysql
+    # ネットワーク
+    networks:
+      - default
+
+volumes:
+  galickho-db-data:

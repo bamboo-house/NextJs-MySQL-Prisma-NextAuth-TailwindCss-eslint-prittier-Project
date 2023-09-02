@@ -1,0 +1,9 @@
+.next
+node_modules
+next-env.d.ts
+public
+postcss.config.js
+tailwind.config.ts
+package-lock.json
+package.json
+tsconfig.json
